@@ -189,3 +189,99 @@ void Save_S(const Station& s)
     cout << "Station saved" << endl;
 }
 
+void Download_P(Pipe& p)
+{
+    ifstream file("pipe.txt");
+
+    if (!file.is_open()) {
+        cout << "Pipe file not found" << endl;
+        return;
+    }
+    Pipe p1;
+
+    if (!(file >> p1.Name_KM)) {
+        cout << "Incorrect pipe Name" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> p1.length)) {
+        cout << "Incorrect pipe length" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> p1.d)) {
+        cout << "Incorrect pipe diametr" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> p1.repair)) {
+        cout << "Incorrect pipe repair" << endl;
+        file.close();
+        return;
+    }
+
+    if (p1.length <= 0 || p1.d <= 0) {
+        cout << "Incorrect length pipe <= 0 or diametr <= 0" << endl;
+        file.close();
+        return;
+    }
+
+    p = p1;
+    file.close();
+    cout << "Pipe downloaded" << endl;
+}
+
+void Download_S(Station& s)
+{
+    ifstream file("station.txt");
+
+    if (!file.is_open()) {
+        cout << "Station file not found" << endl;
+        return;
+    }
+
+    Station s1;
+
+    if (!(file >> s1.Name)) {
+        cout << "Incorrect station Name" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> s1.count_workshops_all)) {
+        cout << "Incorrect station workshops" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> s1.count_in_work)) {
+        cout << "Incorrect station workshops in work" << endl;
+        file.close();
+        return;
+    }
+
+    if (!(file >> s1.class_station)) {
+        cout << "Incorrect class station" << endl;
+        file.close();
+        return;
+    }
+
+    if (s1.count_workshops_all <= 0 || s1.count_in_work < 0 || s1.count_in_work > s1.count_workshops_all) {
+        cout << "Incorrect station worshops <= 0 or in work < 0 or in work > all workshops" << endl;
+        file.close();
+        return;
+    }
+
+    if (s1.class_station != 'a' && s1.class_station != 'b' && s1.class_station != 'c') {
+        cout << "Incorrect class station != a or b or c " << endl;
+        file.close();
+        return;
+    }
+
+    s = s1;
+    file.close();
+    cout << "Station downloaded" << endl;
+}
