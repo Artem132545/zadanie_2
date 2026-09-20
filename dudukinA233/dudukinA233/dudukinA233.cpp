@@ -93,4 +93,51 @@ Station Add_S()
     } while (s.class_station != 'a' && s.class_station != 'b' && s.class_station != 'c');
     return s;
 }
+void Edit_P(Pipe& p)
+{
+    int repair;                            // для функции сохранения сделать .  
+    do {
+        cout << "Status under repair (1 or 0)" << endl;
+        cin >> repair;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+
+    } while (cin.fail() || (repair != 0 && repair != 1));
+    p.repair = repair;
+}
+
+void Edit_S(Station& s)
+{
+    int select;
+    do {
+        cout << "1. Start workshop" << endl;
+        cout << "2. Stop workshop" << endl;
+        cin >> select;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+    } while (cin.fail() || (select != 1 && select != 2));
+    if (select == 1) {
+        if (s.count_in_work < s.count_workshops_all) {
+            s.count_in_work++;
+            cout << "Workshop started" << endl;
+        }
+        else {
+            cout << "All workshops are already working" << endl;
+        }
+    }
+    else {
+        if (s.count_in_work > 0) {
+            s.count_in_work--;
+            cout << "Workshop stopped" << endl;
+        }
+        else {
+            cout << "There are no working workshops" << endl;
+        }
+    }
+}
 
