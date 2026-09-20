@@ -61,3 +61,36 @@ Pipe Add_P()
 
     return p;
 }
+Station Add_S()
+{
+    Station s;
+    cout << "1. Name KS" << endl;
+    cin >> s.Name;
+    do {
+        cout << "2. Enter workshops" << endl;
+        cin >> s.count_workshops_all;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+    } while (cin.fail() || s.count_workshops_all <= 0);
+
+    do {
+        cout << "3. Enter workshops work" << endl;
+        cin >> s.count_in_work;
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+    } while (cin.fail() || s.count_in_work < 0 || s.count_in_work > s.count_workshops_all);
+
+    do {
+        cout << "4. Enter station indicator (a,b,c)" << endl;
+        cin >> s.class_station;
+
+    } while (s.class_station != 'a' && s.class_station != 'b' && s.class_station != 'c');
+    return s;
+}
+
