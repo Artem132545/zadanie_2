@@ -285,3 +285,18 @@ void Download_S(Station& s)
     file.close();
     cout << "Station downloaded" << endl;
 }
+void Menu() {
+
+    cout << "1.Add pipe" << endl;
+    cout << "2.Add Station" << endl;
+    cout << "3.View all objects" << endl;
+    cout << "4.Edit pipe" << endl;
+    cout << "5.Edit Station" << endl;
+    cout << "6.Save" << endl;
+    cout << "7.Download" << endl;
+    cout << "0.Exit" << endl;
+
+}
+
+
+
