@@ -298,5 +298,87 @@ void Menu() {
 
 }
 
+int main()
+{
+    Pipe p1;
+    Station s1;
+
+    while (1)
+    {
+        int select;
+        Menu();
+        cin >> select;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Wrong action" << endl;
+            continue;
+        }
+
+        switch (select)
+        {
+        case 1:
+        {
+            p1 = Add_P();
+            break;
+        }
+
+        case 2:
+        {
+            s1 = Add_S();
+            break;
+        }
+
+        case 3:
+        {
+            cout << "View objects" << endl;
+            cout << endl;
+            cout << "1. Pipe" << endl;
+            Print_P(p1);
+            cout << endl;
+            cout << "2. Station" << endl;
+            Print_S(s1);
+            break;
+        }
+
+        case 4:
+        {
+            Edit_P(p1);
+            break;
+        }
+
+        case 5:
+        {
+            Edit_S(s1);
+            break;
+        }
+
+        case 6:
+        {
+            Save_P(p1);
+            Save_S(s1);
+            break;
+        }
+
+        case 7:
+        {
+            Download_P(p1);
+            Download_S(s1);
+            break;
+        }
+
+        case 0:
+        {
+            return 0;
+        }
+
+        default:
+        {
+            cout << "Wrong action" << endl;
+        }
+        }
+    }
+    return 0;
+}
 
 
