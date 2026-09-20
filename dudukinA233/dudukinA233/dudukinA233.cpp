@@ -140,4 +140,18 @@ void Edit_S(Station& s)
         }
     }
 }
+void Print_P(const Pipe& p)
+{
+    cout << "Kilometer marker: " << p.Name_KM << endl;
+    cout << "Length: " << p.length << endl;
+    cout << "Diameter: " << p.d << endl;
+    cout << "Repair: " << p.repair << endl;
+}
 
+void Print_S(const Station& s)
+{
+    cout << "Name: " << s.Name << endl;
+    cout << "Workshops: " << s.count_workshops_all << endl;
+    cout << "Workshops work: " << s.count_in_work << endl;
+    cout << "Station indicator: " << s.class_station << endl;
+}
