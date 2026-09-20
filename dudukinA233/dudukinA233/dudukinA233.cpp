@@ -1,34 +1,21 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct Pipe
 {
-    string KM;
-    float lenght;
+    string Name_KM;
+    float length;
     float d;
-    bool remont;
+    bool repair;
 };
+
 struct Station
 {
     string Name;
-    int count_ALL;
-    int count_work;
-    char class_station; // (a,b,c)
-    bool rabota;
+    int count_workshops_all;
+    int count_in_work;
+    char class_station;             // (a,b,c)
 };
 
-
-void out() {
-
-    cout << "Add pipe"; //all param
-    cout << "Add Station"; // all param
-
-}
-
-int main()
-{
-    Pipe p;
-    Station s;
-    return 0;
-}
