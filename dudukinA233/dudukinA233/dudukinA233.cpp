@@ -155,3 +155,37 @@ void Print_S(const Station& s)
     cout << "Workshops work: " << s.count_in_work << endl;
     cout << "Station indicator: " << s.class_station << endl;
 }
+void Save_P(const Pipe& p)
+{
+    ofstream file("pipe.txt");
+    if (!file.is_open()) {
+        cout << "File opening error" << endl;
+        return;
+    }
+    file << p.Name_KM << endl;
+    file << p.length << endl;
+    file << p.d << endl;
+    file << p.repair << endl;
+    file.close();
+    cout << "Pipe saved" << endl;
+}
+
+void Save_S(const Station& s)
+{
+    ofstream file("station.txt");
+
+    if (!file.is_open()) {
+        cout << "File opening error" << endl;
+        return;
+    }
+
+    file << s.Name << endl;
+    file << s.count_workshops_all << endl;
+    file << s.count_in_work << endl;
+    file << s.class_station << endl;
+
+    file.close();
+
+    cout << "Station saved" << endl;
+}
+
