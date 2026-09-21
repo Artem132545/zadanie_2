@@ -18,20 +18,29 @@ struct Station
     int count_in_work;
     char class_station;             // (a,b,c)
 };
+int Get_positive_numb() {
+    int k;
+    while (1) {
+        if (cin >> k && cin.peek() == '\n' && k > 0) {
+            return k;
+        }
+        else {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Wrong action" << endl;
+        }
+    }
+}
+
 Pipe Add_P()
 {
     Pipe p;
     cout << "1.Kilometer marker" << endl;
     cin >> p.Name_KM;
-    do {
+    
         cout << "2.enter length" << endl;
-        cin >> p.length;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-        }
-    } while (cin.fail() || p.length <= 0);
+        p.length = Get_positive_numb();
+  
 
     do {
         cout << "3. enter diametr pipe" << endl;
@@ -305,17 +314,9 @@ int main()
 
     while (1)
     {
-        int select;
         Menu();
-        cin >> select;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
-            cout << "Wrong action" << endl;
-            continue;
-        }
 
-        switch (select)
+        switch (Get_positive_numb())
         {
         case 1:
         {
