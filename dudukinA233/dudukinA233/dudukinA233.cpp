@@ -16,15 +16,41 @@ struct Station
     string Name;
     int count_workshops_all;
     int count_in_work;
-    char class_station;             // (a,b,c)
+    char class_station;
 };
-int Get_positive_numb() {
+
+// Ввод положительного числа
+int Get_positive_numb()
+{
     int k;
-    while (1) {
-        if (cin >> k && cin.peek() == '\n' && k > 0) {
+
+    while (1)
+    {
+        if (cin >> k && cin.peek() == '\n' && k > 0)
+        {
             return k;
         }
-        else {
+        else
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Wrong action" << endl;
+        }
+    }
+}
+
+int Get_number()
+{
+    int k;
+
+    while (1)
+    {
+        if (cin >> k && cin.peek() == '\n' && k >= 0)
+        {
+            return k;
+        }
+        else
+        {
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "Wrong action" << endl;
@@ -35,120 +61,146 @@ int Get_positive_numb() {
 Pipe Add_P()
 {
     Pipe p;
+
     cout << "1.Kilometer marker" << endl;
     cin >> p.Name_KM;
-    
-        cout << "2.enter length" << endl;
-        p.length = Get_positive_numb();
-  
 
-    do {
-        cout << "3. enter diametr pipe" << endl;
-        cin >> p.d;
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(1000, '\n');
-        }
-    } while (cin.fail() || p.d <= 0);
+    cout << "2.enter length" << endl;
+    p.length = Get_positive_numb();
+
+    cout << "3. enter diametr pipe" << endl;
+    p.d = Get_positive_numb();
+
+    cout << "4. Status under repair (1 or 0)" << endl;
+
     int repair;
-    do
+
+    while (1)
     {
-        cout << "4. Status under repair (1 or 0)" << endl;
-        cin >> repair;
+        repair = Get_number();
 
-        if (cin.fail())
-        {
-            cin.clear();
-            cin.ignore(10000, '\n');
-        }
+        if (repair == 0 || repair == 1)
+            break;
 
-    } while (cin.fail() || (repair != 0 && repair != 1));
+        cout << "Wrong action. Enter 0 or 1" << endl;
+    }
 
     p.repair = repair;
 
-
     return p;
 }
+
 Station Add_S()
 {
     Station s;
+
     cout << "1. Name KS" << endl;
     cin >> s.Name;
-    do {
-        cout << "2. Enter workshops" << endl;
-        cin >> s.count_workshops_all;
 
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
-        }
-    } while (cin.fail() || s.count_workshops_all <= 0);
+    cout << "2. Enter workshops" << endl;
+    s.count_workshops_all = Get_positive_numb();
 
-    do {
-        cout << "3. Enter workshops work" << endl;
-        cin >> s.count_in_work;
-        if (cin.fail())
+    cout << "3. Enter workshops work" << endl;
+
+    while (1)
+    {
+        s.count_in_work = Get_number();
+
+        if (s.count_in_work >= 0 &&
+            s.count_in_work <= s.count_workshops_all)
         {
-            cin.clear();
-            cin.ignore(10000, '\n');
+            break;
         }
-    } while (cin.fail() || s.count_in_work < 0 || s.count_in_work > s.count_workshops_all);
 
-    do {
-        cout << "4. Enter station indicator (a,b,c)" << endl;
+        cout << "Wrong action. Enter value from 0 to "
+            << s.count_workshops_all << endl;
+    }
+
+    cout << "4. Enter station indicator (a,b,c)" << endl;
+
+    while (1)
+    {
         cin >> s.class_station;
 
-    } while (s.class_station != 'a' && s.class_station != 'b' && s.class_station != 'c');
-    return s;
-}
-void Edit_P(Pipe& p)
-{
-    int repair;                            // для функции сохранения сделать .  
-    do {
-        cout << "Status under repair (1 or 0)" << endl;
-        cin >> repair;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
+        if (cin.peek() == '\n' &&
+            (s.class_station == 'a' ||
+                s.class_station == 'b' ||
+                s.class_station == 'c'))
+        {
+            break;
         }
 
-    } while (cin.fail() || (repair != 0 && repair != 1));
+        cin.clear();
+        cin.ignore(10000, '\n');
+
+        cout << "Wrong action. Enter a, b or c" << endl;
+    }
+
+    return s;
+}
+
+void Edit_P(Pipe& p)
+{
+    int repair;
+
+    cout << "Status under repair (1 or 0)" << endl;
+
+    while (1)
+    {
+        repair = Get_number();
+
+        if (repair == 0 || repair == 1)
+            break;
+
+        cout << "Wrong action. Enter 0 or 1" << endl;
+    }
+
     p.repair = repair;
 }
 
 void Edit_S(Station& s)
 {
     int select;
-    do {
-        cout << "1. Start workshop" << endl;
-        cout << "2. Stop workshop" << endl;
-        cin >> select;
 
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
-        }
-    } while (cin.fail() || (select != 1 && select != 2));
-    if (select == 1) {
-        if (s.count_in_work < s.count_workshops_all) {
+    cout << "1. Start workshop" << endl;
+    cout << "2. Stop workshop" << endl;
+
+    while (1)
+    {
+        select = Get_positive_numb();
+
+        if (select == 1 || select == 2)
+            break;
+
+        cout << "Wrong action. Enter 1 or 2" << endl;
+    }
+
+    if (select == 1)
+    {
+        if (s.count_in_work < s.count_workshops_all)
+        {
             s.count_in_work++;
             cout << "Workshop started" << endl;
         }
-        else {
+        else
+        {
             cout << "All workshops are already working" << endl;
         }
     }
-    else {
-        if (s.count_in_work > 0) {
+    else
+    {
+        if (s.count_in_work > 0)
+        {
             s.count_in_work--;
             cout << "Workshop stopped" << endl;
         }
-        else {
+        else
+        {
             cout << "There are no working workshops" << endl;
         }
     }
 }
+
 void Print_P(const Pipe& p)
 {
     cout << "Kilometer marker: " << p.Name_KM << endl;
@@ -164,138 +216,157 @@ void Print_S(const Station& s)
     cout << "Workshops work: " << s.count_in_work << endl;
     cout << "Station indicator: " << s.class_station << endl;
 }
-void Save_P(const Pipe& p)
-{
-    ofstream file("pipe.txt");
-    if (!file.is_open()) {
-        cout << "File opening error" << endl;
-        return;
-    }
-    file << p.Name_KM << endl;
-    file << p.length << endl;
-    file << p.d << endl;
-    file << p.repair << endl;
-    file.close();
-    cout << "Pipe saved" << endl;
-}
 
-void Save_S(const Station& s)
-{
-    ofstream file("station.txt");
 
-    if (!file.is_open()) {
+void Save(const Pipe& p, const Station& s,
+    bool pipe_exists, bool station_exists)
+{
+    ofstream file("data.txt");
+
+    if (!file.is_open())
+    {
         cout << "File opening error" << endl;
         return;
     }
 
-    file << s.Name << endl;
-    file << s.count_workshops_all << endl;
-    file << s.count_in_work << endl;
-    file << s.class_station << endl;
+    if (pipe_exists)
+    {
+        file << "PIPE" << endl;
+        file << p.Name_KM << endl;
+        file << p.length << endl;
+        file << p.d << endl;
+        file << p.repair << endl;
+    }
+
+    if (station_exists)
+    {
+        file << "STATION" << endl;
+        file << s.Name << endl;
+        file << s.count_workshops_all << endl;
+        file << s.count_in_work << endl;
+        file << s.class_station << endl;
+    }
 
     file.close();
 
-    cout << "Station saved" << endl;
+    cout << "Data saved" << endl;
 }
 
-void Download_P(Pipe& p)
+
+void Download(Pipe& p, Station& s,
+    bool& pipe_exists, bool& station_exists)
 {
-    ifstream file("pipe.txt");
+    ifstream file("data.txt");
 
-    if (!file.is_open()) {
-        cout << "Pipe file not found" << endl;
-        return;
-    }
-    Pipe p1;
-
-    if (!(file >> p1.Name_KM)) {
-        cout << "Incorrect pipe Name" << endl;
-        file.close();
+    if (!file.is_open())
+    {
+        cout << "Data file not found" << endl;
         return;
     }
 
-    if (!(file >> p1.length)) {
-        cout << "Incorrect pipe length" << endl;
-        file.close();
-        return;
+    string type;
+
+    while (file >> type)
+    {
+        if (type == "PIPE")
+        {
+            Pipe p1;
+
+            if (!(file >> p1.Name_KM))
+            {
+                cout << "Incorrect pipe Name" << endl;
+                break;
+            }
+
+            if (!(file >> p1.length))
+            {
+                cout << "Incorrect pipe length" << endl;
+                break;
+            }
+
+            if (!(file >> p1.d))
+            {
+                cout << "Incorrect pipe diametr" << endl;
+                break;
+            }
+
+            if (!(file >> p1.repair))
+            {
+                cout << "Incorrect pipe repair" << endl;
+                break;
+            }
+
+            if (p1.length <= 0 || p1.d <= 0)
+            {
+                cout << "Incorrect pipe length or diametr" << endl;
+                break;
+            }
+
+            p = p1;
+            pipe_exists = true;
+        }
+
+        else if (type == "STATION")
+        {
+            Station s1;
+
+            if (!(file >> s1.Name))
+            {
+                cout << "Incorrect station Name" << endl;
+                break;
+            }
+
+            if (!(file >> s1.count_workshops_all))
+            {
+                cout << "Incorrect station workshops" << endl;
+                break;
+            }
+
+            if (!(file >> s1.count_in_work))
+            {
+                cout << "Incorrect station workshops in work" << endl;
+                break;
+            }
+
+            if (!(file >> s1.class_station))
+            {
+                cout << "Incorrect class station" << endl;
+                break;
+            }
+
+            if (s1.count_workshops_all <= 0 ||
+                s1.count_in_work < 0 ||
+                s1.count_in_work > s1.count_workshops_all)
+            {
+                cout << "Incorrect station workshops" << endl;
+                break;
+            }
+
+            if (s1.class_station != 'a' &&
+                s1.class_station != 'b' &&
+                s1.class_station != 'c')
+            {
+                cout << "Incorrect class station" << endl;
+                break;
+            }
+
+            s = s1;
+            station_exists = true;
+        }
     }
 
-    if (!(file >> p1.d)) {
-        cout << "Incorrect pipe diametr" << endl;
-        file.close();
-        return;
-    }
-
-    if (!(file >> p1.repair)) {
-        cout << "Incorrect pipe repair" << endl;
-        file.close();
-        return;
-    }
-
-    if (p1.length <= 0 || p1.d <= 0) {
-        cout << "Incorrect length pipe <= 0 or diametr <= 0" << endl;
-        file.close();
-        return;
-    }
-
-    p = p1;
     file.close();
-    cout << "Pipe downloaded" << endl;
+
+    if (pipe_exists)
+        cout << "Pipe downloaded" << endl;
+
+    if (station_exists)
+        cout << "Station downloaded" << endl;
 }
 
-void Download_S(Station& s)
+
+void Menu()
 {
-    ifstream file("station.txt");
-
-    if (!file.is_open()) {
-        cout << "Station file not found" << endl;
-        return;
-    }
-
-    Station s1;
-
-    if (!(file >> s1.Name)) {
-        cout << "Incorrect station Name" << endl;
-        file.close();
-        return;
-    }
-
-    if (!(file >> s1.count_workshops_all)) {
-        cout << "Incorrect station workshops" << endl;
-        file.close();
-        return;
-    }
-
-    if (!(file >> s1.count_in_work)) {
-        cout << "Incorrect station workshops in work" << endl;
-        file.close();
-        return;
-    }
-
-    if (!(file >> s1.class_station)) {
-        cout << "Incorrect class station" << endl;
-        file.close();
-        return;
-    }
-
-    if (s1.count_workshops_all <= 0 || s1.count_in_work < 0 || s1.count_in_work > s1.count_workshops_all) {
-        cout << "Incorrect station worshops <= 0 or in work < 0 or in work > all workshops" << endl;
-        file.close();
-        return;
-    }
-
-    if (s1.class_station != 'a' && s1.class_station != 'b' && s1.class_station != 'c') {
-        cout << "Incorrect class station != a or b or c " << endl;
-        file.close();
-        return;
-    }
-
-    s = s1;
-    file.close();
-    cout << "Station downloaded" << endl;
-}
-void Menu() {
-
     cout << "1.Add pipe" << endl;
     cout << "2.Add Station" << endl;
     cout << "3.View all objects" << endl;
@@ -304,13 +375,16 @@ void Menu() {
     cout << "6.Save" << endl;
     cout << "7.Download" << endl;
     cout << "0.Exit" << endl;
-
 }
+
 
 int main()
 {
     Pipe p1;
     Station s1;
+
+    bool pipe_exists = false;
+    bool station_exists = false;
 
     while (1)
     {
@@ -321,12 +395,14 @@ int main()
         case 1:
         {
             p1 = Add_P();
+            pipe_exists = true;
             break;
         }
 
         case 2:
         {
             s1 = Add_S();
+            station_exists = true;
             break;
         }
 
@@ -334,37 +410,61 @@ int main()
         {
             cout << "View objects" << endl;
             cout << endl;
-            cout << "1. Pipe" << endl;
-            Print_P(p1);
+
+            if (pipe_exists)
+            {
+                cout << "1. Pipe" << endl;
+                Print_P(p1);
+            }
+            else
+            {
+                cout << "Pipe does not exist" << endl;
+            }
+
             cout << endl;
-            cout << "2. Station" << endl;
-            Print_S(s1);
+
+            if (station_exists)
+            {
+                cout << "2. Station" << endl;
+                Print_S(s1);
+            }
+            else
+            {
+                cout << "Station does not exist" << endl;
+            }
+
             break;
         }
 
         case 4:
         {
-            Edit_P(p1);
+            if (pipe_exists)
+                Edit_P(p1);
+            else
+                cout << "Pipe does not exist" << endl;
+
             break;
         }
 
         case 5:
         {
-            Edit_S(s1);
+            if (station_exists)
+                Edit_S(s1);
+            else
+                cout << "Station does not exist" << endl;
+
             break;
         }
 
         case 6:
         {
-            Save_P(p1);
-            Save_S(s1);
+            Save(p1, s1, pipe_exists, station_exists);
             break;
         }
 
         case 7:
         {
-            Download_P(p1);
-            Download_S(s1);
+            Download(p1, s1, pipe_exists, station_exists);
             break;
         }
 
@@ -379,7 +479,6 @@ int main()
         }
         }
     }
+
     return 0;
 }
-
-
