@@ -330,6 +330,7 @@ unordered_map<int, Station> Network::FindStations()
         return unordered_map<int, Station>();
     }
 
+
     StationFilter f;
     cout << "Part of station name (Enter = any): ";
     f.name = Get_line();
