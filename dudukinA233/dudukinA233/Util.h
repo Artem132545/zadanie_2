@@ -17,6 +17,20 @@ char Get_class_station();
 
 const int MAX_OBJECT_ID = 1000000000;
 
+template <typename T, typename Tx, typename Filter>
+std::unordered_map<int, T> search(const std::unordered_map<int, T>& objects, const Tx& criterion, Filter f)
+{
+    std::unordered_map<int, T> subset;
+
+    for (const auto& item : objects)
+    {
+        const T& p = item.second;
+        if (f(p, criterion))
+            subset.emplace(item.first, p);
+    }
+    return subset;
+}
+
 
 
 #endif
