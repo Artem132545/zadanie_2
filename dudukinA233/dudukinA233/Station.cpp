@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 int Station::Next_id_S = 1;
 
 Station::Station() : id(Next_id_S++), Name(""),
