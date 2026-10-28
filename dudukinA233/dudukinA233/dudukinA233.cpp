@@ -1,12 +1,15 @@
+#include "Network.h"
 #include "Util.h"
 #include <iostream>
+#include <fstream>
+#include <chrono>
+#include <format>
 
 using namespace std;
 
 void Menu()
 {
-    cout << "\n======= MENU =======\n"
-        << "1. Add pipe\n"
+    cout << "1. Add pipe\n"
         << "2. Add station\n"
         << "3. View all objects\n"
         << "4. Edit pipe\n"
@@ -22,15 +25,26 @@ void Menu()
         << "Choose action: ";
 }
 
+
 int main()
 {
+    string time = std::format("{:%d_%m_%Y %H_%M_%OS}",
+        std::chrono::system_clock::now());
+
+    ofstream logfile("log_" + time + ".txt");
+
+    redirect_output_wrapper cerr_out(cerr);
+
+    if (logfile)
+        cerr_out.redirect(logfile);
+
     Network network;
 
     while (true)
     {
         Menu();
+
         int action = Get_number();
-        network.LogMenu(action);
 
         switch (action)
         {
@@ -46,18 +60,12 @@ int main()
         case 10: network.SearchPipes(); break;
         case 11: network.SearchStations(); break;
         case 12: network.BatchEditPipes(); break;
+
         case 0:
-        {
-            cout << "Save before exit? (0 - no, 1 - yes): ";
-            bool save = (Get_int_range(0, 1) == 1);
-            network.LogExitDecision(save);
-            if (save)
-                network.SaveInteractive();
-            cout << "Goodbye!\n";
             return 0;
-        }
+
         default:
-            cout << "Wrong action\n";
+            cout << "Wrong action" << endl;
             break;
         }
     }
