@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-
+#include <unordered_map>
 
 class Station
 {
@@ -25,12 +25,14 @@ public:
     void Edit_S();
 
     void SaveToFile(std::ostream& out) const;
-    static bool LoadFromFile(std::istream& in, Station& s, int& loaded_id);
+    bool LoadFromFile(std::istream& file);
+
+    static void CalcMaxId(const std::unordered_map<int, Station>& css);
 
     friend std::istream& operator>>(std::istream& in, Station& s);
     friend std::ostream& operator<<(std::ostream& out, const Station& s);
-};
 
-Station Add_S();
+    
+};
 
 #endif
