@@ -1,111 +1,82 @@
+
 #include "Pipe.h"
 #include "Util.h"
 
-#include <iostream>
-#include <string>
-
 using namespace std;
 
-int Pipe::Next_id_P = 1;
+int Pipe::NextId = 1;
 
-Pipe::Pipe() : id(Next_id_P++), Name_KM(""), d(0), length(0), repair(false)
+Pipe::Pipe()
 {
+    id = NextId++;
 }
 
-int Pipe::Get_id() const
+int Pipe::getID() const
 {
     return id;
 }
 
-const string& Pipe::Get_name() const
+string Pipe::getName() const
 {
-    return Name_KM;
+    return name;
 }
 
-bool Pipe::Is_repair() const
+bool Pipe::getUnderRepair() const
 {
-    return repair;
+    return underRepair;
 }
 
-void Pipe::Set_repair(bool value)
+void Pipe::editUnderRepair()
 {
-    repair = value;
+    underRepair = !underRepair;
 }
 
 istream& operator>>(istream& in, Pipe& p)
 {
-    cout << "Enter pipe name: ";
-    p.Name_KM = Get_name();
+    readValidName(p.name, "Enter pipe name: ");
 
-    cout << "Enter pipe length: ";
-    p.length = Get_positive_numb();
+    readValidNumber(p.length, "Enter pipe length: ", 1.0);
 
-    cout << "Enter pipe diameter: ";
-    p.d = Get_positive_numb();
+    readValidNumber(p.diameter, "Enter pipe diameter: ", 1);
 
-    cout << "Under repair (0 - no, 1 - yes): ";
-    p.repair = (Get_int_range(0, 1) == 1);
+    readValidNumber(p.underRepair, "Under repair (0 - no, 1 - yes): ", false, true);
 
     return in;
+}
+
+ifstream& operator>>(ifstream& inF, Pipe& p)
+{
+    int savedID;
+
+    inF >> savedID;
+    inF.ignore(10000, '\n');
+
+    getline(inF, p.name);
+
+    inF >> p.length >> p.diameter >> p.underRepair;
+
+    return inF;
 }
 
 ostream& operator<<(ostream& out, const Pipe& p)
 {
     out << "Pipe ID: " << p.id << '\n'
-        << "Name: " << p.Name_KM << '\n'
+        << "Name: " << p.name << '\n'
         << "Length: " << p.length << '\n'
-        << "Diameter: " << p.d << '\n'
-        << "Under repair: " << (p.repair ? "yes" : "no") << '\n';
+        << "Diameter: " << p.diameter << '\n'
+        << "Under repair: "
+        << (p.underRepair ? "yes" : "no") << '\n';
 
     return out;
 }
 
-void Pipe::Edit_P()
+ofstream& operator<<(ofstream& outF, const Pipe& p)
 {
-    cout << "New pipe name: ";
-    Name_KM = ::Get_name();
+    outF << p.id << '\n'
+        << p.name << '\n'
+        << p.length << '\n'
+        << p.diameter << '\n'
+        << p.underRepair << '\n';
 
-    cout << "New length: ";
-    length = Get_positive_numb();
-
-    cout << "New diameter: ";
-    d = Get_positive_numb();
-
-    cout << "Under repair (0 - no, 1 - yes): ";
-    repair = (Get_int_range(0, 1) == 1);
-}
-
-void Pipe::SaveToFile(ostream& out) const
-{
-    out << "PIPE\n"
-        << id << '\n'
-        << Name_KM << '\n'
-        << length << '\n'
-        << d << '\n'
-        << (repair ? 1 : 0) << '\n';
-}
-
-bool Pipe::LoadFromFile(istream& file)
-{
-    file >> id;
-
-    file.ignore(10000, '\n');
-
-    getline(file, Name_KM);
-
-    file >> length >> d >> repair;
-
-    file.ignore(10000, '\n');
-
-    return bool(file);
-}
-void Pipe::CalcMaxId(const unordered_map<int, Pipe>& pipes)
-{
-    Next_id_P = 1;
-
-    for (const auto& [id, p] : pipes)
-    {
-        if (id >= Next_id_P)
-            Next_id_P = id + 1;
-    }
+    return outF;
 }
