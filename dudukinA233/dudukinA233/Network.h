@@ -1,36 +1,35 @@
-
-#ifndef NETWORK_H
-#define NETWORK_H
-
+#pragma once
 #include "Pipe.h"
 #include "Station.h"
 #include <string>
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
 
 class Network
 {
 private:
+
+    int nextPipeID = 1;
+    int nextStationID = 1;
+
     std::unordered_map<int, Pipe> pipes;
     std::unordered_map<int, Station> stations;
 
-    std::unordered_map<int, Pipe> FindPipes();
-    std::unordered_map<int, Station> FindStations();
+    std::vector<int> FindPipes();
+    std::vector<int> FindStations();
 
-    bool Save(const std::string& filename);
+    void BatchOperation(const std::vector<int>& ids);
+
+    bool Save(const std::string& filename) const;
     bool Load(const std::string& filename);
 
-    std::vector<int> SelectPipeIDs(
-        const std::unordered_map<int, Pipe>& found);
-
-    void ApplyBatchOperation(const std::vector<int>& chosen);
-
 public:
+    Network();
 
     void AddPipe();
     void AddStation();
 
-    void ViewAll();
+    void ViewAll() const;
 
     void EditPipe();
     void EditStation();
@@ -43,8 +42,6 @@ public:
 
     void BatchEditPipes();
 
-    void SaveInteractive();
+    void SaveInteractive() const;
     void LoadInteractive();
 };
-
-#endif
