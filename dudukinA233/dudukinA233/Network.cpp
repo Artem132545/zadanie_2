@@ -5,6 +5,12 @@
 
 using namespace std;
 
+Network::Network()
+{
+    nextPipeID = 1;
+    nextStationID = 1;
+}
+
 bool checkByRepair(const Pipe& p, bool underRepair)
 {
     return p.getUnderRepair() == underRepair;
@@ -20,9 +26,11 @@ bool checkMoreWorkshops(const Station& s, double percent)
     return s.getUnusedWorkshops() > percent;
 }
 
+
 void Network::AddPipe()
 {
-    Pipe p;
+    Pipe p(nextPipeID++);
+
     cin >> p;
 
     int id = p.getID();
@@ -32,9 +40,12 @@ void Network::AddPipe()
     cout << "Pipe added. ID: " << id << '\n';
 }
 
+
+
 void Network::AddStation()
 {
-    Station s;
+    Station s(nextStationID++);
+
     cin >> s;
 
     int id = s.getID();
@@ -43,6 +54,7 @@ void Network::AddStation()
 
     cout << "Station added. ID: " << id << '\n';
 }
+
 
 void Network::ViewAll() const
 {
@@ -209,8 +221,7 @@ vector<int> Network::FindStations()
 
         readName(name, "Part of station name: ");
 
-        found = findAndOutputObjectsByFilter(
-            stations, checkByName<Station>, name);
+        found = findAndOutputObjectsByFilter(stations, checkByName<Station>, name);
     }
     else
     {
@@ -299,6 +310,7 @@ void Network::BatchEditPipes()
 }
 
 
+
 bool Network::Save(const string& filename) const
 {
     ofstream file(filename);
@@ -318,10 +330,17 @@ bool Network::Save(const string& filename) const
         file << item.second;
     }
 
+    file << "NEXT_PIPE_ID\n";
+    file << nextPipeID << '\n';
+
+    file << "NEXT_STATION_ID\n";
+    file << nextStationID << '\n';
+
     file.close();
 
     return file.good();
 }
+
 
 
 bool Network::Load(const string& filename)
@@ -333,26 +352,62 @@ bool Network::Load(const string& filename)
 
     pipes.clear();
     stations.clear();
-    
+
     string type;
 
     while (getline(file, type))
     {
         if (type == "PIPE")
         {
-            Pipe p;
+            int savedID;
+
+            file >> savedID;
+            file.ignore(10000, '\n');
+
+            Pipe p(savedID);
             file >> p;
             file.ignore(10000, '\n');
 
             pipes.emplace(p.getID(), p);
+
+            if (savedID >= nextPipeID)
+                nextPipeID = savedID + 1;
         }
         else if (type == "STATION")
         {
-            Station s;
+            int savedID;
+
+            file >> savedID;
+            file.ignore(10000, '\n');
+
+            Station s(savedID);
             file >> s;
             file.ignore(10000, '\n');
 
             stations.emplace(s.getID(), s);
+
+            if (savedID >= nextStationID)
+                nextStationID = savedID + 1;
+        }
+        else if (type == "NEXT_PIPE_ID")
+        {
+            int savedNextID;
+
+            file >> savedNextID;
+            file.ignore(10000, '\n');
+
+            if (savedNextID > nextPipeID)
+                nextPipeID = savedNextID;
+        }
+        else if (type == "NEXT_STATION_ID")
+        {
+            int savedNextID;
+
+            file >> savedNextID;
+            file.ignore(10000, '\n');
+
+            if (savedNextID > nextStationID)
+                nextStationID = savedNextID;
         }
     }
 
